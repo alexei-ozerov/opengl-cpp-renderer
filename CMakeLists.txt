@@ -1,5 +1,8 @@
-cmake_minimum_required (VERSION 3.5)
-project (OGLR)
+#
+# Specify minimum CMake version and project name
+#
+cmake_minimum_required (VERSION 3.0)
+project (renderer)
 
 #
 # CMake setup
@@ -7,10 +10,11 @@ project (OGLR)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set (CMAKE_VERBOSE_MAKEFILE 0) # 1 should be used for debugging
 set (CMAKE_SUPPRESS_REGENERATION TRUE) # Suppresses ZERO_CHECK
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 if(MSVC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
 else()
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -std=c++11")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -std=c++17")
   if(NOT WIN32)
     set(GLAD_LIBRARIES dl)
   endif()
@@ -23,31 +27,32 @@ option (GLFW_INSTALL OFF)
 option (GLFW_BUILD_DOCS OFF)
 option (GLFW_BUILD_EXAMPLES OFF)
 option (GLFW_BUILD_TESTS OFF)
-add_subdirectory (vendor/glfw)
+
+add_subdirectory (renderer/vendor/glfw)
 
 #
 # Set include paths
 #
-include_directories (src/
-                     vendor/glad/include/
-                     vendor/glfw/include/
-                     vendor/glm/
-                     vendor/stb/)
+include_directories (renderer/src/
+                     renderer/vendor/glad/include/
+                     renderer/vendor/glfw/include/
+                     renderer/vendor/glm/
+                     renderer/vendor/stb/)
 
 #
 # Add files
 #
-file (GLOB         VENDORS_SOURCES vendor/glad/src/glad.c)
-file (GLOB_RECURSE PROJECT_HEADERS src/*.hpp
-                                   src/*.h)
-file (GLOB_RECURSE PROJECT_SOURCES src/*.cpp
-                                   src/*.cxx
-                                   src/*.cc
-                                   src/*.c)
-file (GLOB_RECURSE PROJECT_SHADERS shaders/*.comp
-                                   shaders/*.frag
-                                   shaders/*.geom
-                                   shaders/*.vert)
+file (GLOB         VENDORS_SOURCES renderer/vendor/glad/src/glad.c)
+file (GLOB_RECURSE PROJECT_HEADERS renderer/src/*.hpp
+                                   renderer/src/*.h)
+file (GLOB_RECURSE PROJECT_SOURCES renderer/src/*.cpp
+                                   renderer/src/*.cxx
+                                   renderer/src/*.cc
+                                   renderer/src/*.c)
+file (GLOB_RECURSE PROJECT_SHADERS renderer/shaders/*.comp
+                                   renderer/shaders/*.frag
+                                   renderer/shaders/*.geom
+                                   renderer/shaders/*.vert)
 file (GLOB         PROJECT_CONFIGS CMakeLists.txt
                                    README.rst
                                   .gitignore
